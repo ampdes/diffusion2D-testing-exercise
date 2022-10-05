@@ -45,8 +45,8 @@ class SolveDiffusion2D:
         self.nx = int(w / dx)
         self.ny = int(h / dy)
 
-    def initialize_physical_parameters(self, d=4., T_cold=300, T_hot=700):
-        self.D = d
+    def initialize_physical_parameters(self, D=4., T_cold=300.0, T_hot=700.0):
+        self.D = D
         self.T_cold = T_cold
         self.T_hot = T_hot
 
