@@ -93,15 +93,18 @@ class SolveDiffusion2D:
         return fignum, im
 
 
-def output_figure(fig, im):
+def output_figure(fig, im, save=None):
     fig.subplots_adjust(right=0.85)
     cbar_ax = fig.add_axes([0.9, 0.15, 0.03, 0.7])
     cbar_ax.set_xlabel('$T$ / K', labelpad=20)
     fig.colorbar(im, cax=cbar_ax)
+
+    if save is not None:
+        plt.savefig(save)
     plt.show()
 
 
-def main():
+def main(fig_name):
     DiffusionSolver = SolveDiffusion2D()
 
     DiffusionSolver.initialize_domain()
@@ -132,8 +135,9 @@ def main():
         u0 = u.copy()
 
     # Plot output figures
-    output_figure(fig, im)
+    output_figure(fig, im, save=fig_name)
 
 
 if __name__ == "__main__":
-    main()
+    fig_name = "solution.png"
+    main(fig_name)
