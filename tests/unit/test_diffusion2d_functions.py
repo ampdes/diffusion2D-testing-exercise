@@ -4,55 +4,71 @@ Tests for functions in class SolveDiffusion2D
 
 from diffusion2d import SolveDiffusion2D
 import numpy as np
+from unittest import TestCase
 
-def test_initialize_domain():
+class TestSolveDiffusion2D(TestCase):
     """
-    Check function SolveDiffusion2D.initialize_domain
+    Check the class SolveDiffusion2D
     """
-    solver = SolveDiffusion2D()
-    solver.initialize_domain(w=20., h=10., dx=0.2, dy=0.5)
-    
-    assert type(solver.w) == float
-    assert type(solver.h) == float
-    assert type(solver.dx) == float
-    assert type(solver.dy) == float
-    assert type(solver.nx) == int
-    assert type(solver.ny) == int
+    def setUp(self) -> None:
+        # parameters for initialize_domain
+        self.w=20. 
+        self.h=10.
+        self.dx=0.2
+        self.dy=0.5
+        self.nx = 10
+        self.ny = 20
+        self.T_cold = 300.0
+        self.T_hot = 700.0
+        self.D = 4.0
 
-    assert solver.nx == 100
-    assert solver.ny == 20
+    def test_initialize_domain(self):
+        """
+        Check function SolveDiffusion2D.initialize_domain
+        """        
+        solver = SolveDiffusion2D()
+        solver.initialize_domain(w=self.w, h=self.h, dx=self.dx, dy=self.dy)
 
-def test_initialize_physical_parameters():
-    """
-    Checks function SolveDiffusion2D.initialize_domain
-    """
-    solver = SolveDiffusion2D()
-    
-    solver.dx = 0.2
-    solver.dy = 0.6
+        self.assertIsInstance(solver.w, float)
+        self.assertIsInstance(solver.h, float)
+        self.assertIsInstance(solver.dx, float)
+        self.assertIsInstance(solver.dy, float)
+        self.assertIsInstance(solver.nx, int)
+        self.assertIsInstance(solver.ny, int)
 
-    solver.initialize_physical_parameters(D=4.0, T_cold=300.0, T_hot=700.0)
+        self.assertEqual(solver.nx, 100)
+        self.assertEqual(solver.ny, 20)
 
-    assert type(solver.D) == float
-    assert type(solver.T_cold) == float
-    assert type(solver.T_hot) == float
-    assert type(solver.dt) == float
+    def test_initialize_physical_parameters(self):
+        """
+        Checks function SolveDiffusion2D.initialize_domain
+        """
+        solver = SolveDiffusion2D()
+        solver.dx = self.dx
+        solver.dy = self.dy
 
-def test_set_initial_condition():
-    """
-    Checks function SolveDiffusion2D.get_initial_function
-    """
-    solver = SolveDiffusion2D()
+        solver.initialize_physical_parameters(D=self.D, T_cold=self.T_cold, T_hot=self.T_hot)
 
-    solver.nx = 10
-    solver.ny = 20
-    solver.dx = 0.4
-    solver.dy = 0.2
-    solver.T_cold = 300.0
-    solver.T_hot = 700.0
+        self.assertIsInstance(solver.D, float)
+        self.assertIsInstance(solver.T_cold, float)
+        self.assertIsInstance(solver.T_hot, float)
+        self.assertIsInstance(solver.dt, float)
 
-    u0 = solver.set_initial_condition()
+    def test_set_initial_condition(self):
+        """
+        Checks function SolveDiffusion2D.get_initial_function
+        """
+        solver = SolveDiffusion2D()
 
-    assert type(u0) == np.ndarray
-    assert solver.nx == u0.shape[0]
-    assert solver.ny == u0.shape[1]
+        solver.nx = self.nx
+        solver.ny = self.ny
+        solver.dx = self.dx
+        solver.dy = self.dy
+        solver.T_cold = self.T_cold
+        solver.T_hot = self.T_hot
+
+        u0 = solver.set_initial_condition()
+
+        self.assertIsInstance(u0, np.ndarray)
+        self.assertEqual(solver.nx, u0.shape[0])
+        self.assertEqual(solver.ny, u0.shape[1])
